@@ -1,0 +1,9 @@
+*.abc
+*.fmt
+*.eps
+*.jpg
+*.jpeg
+*.ps
+abcs/
+pdfs/
+mp3s/
