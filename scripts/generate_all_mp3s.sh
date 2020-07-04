@@ -14,5 +14,5 @@ for i in abcs/*.abc; do # Whitespace-safe but not recursive.
     export ABC_FILE="${i##*/}"
     export ABC_FILENAME="${ABC_FILE%.*}"
     echo $ABC_FILENAME
-    python generate_mp3.py abcs/${ABC_FILENAME}.abc mp3s/
+    python generate_mp3.py ../abcs/${ABC_FILENAME}.abc ../mp3s/
 done

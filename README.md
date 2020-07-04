@@ -27,3 +27,9 @@ Pass in abc path (relative to scripts folder) e.g. `../abc/tunes.abc and then mp
 `docker run -it -v ${PWD}/abcs:/abcs/ -v ${PWD}/mp3s:/mp3s/ -v ${PWD}/pdfs:/pdfs/ abc python generate_mp3.py ../abcs/tunes.abc ../mp3s`
 
 
+### Create CSV file
+
+Pass in abc path (relative to scripts folder) e.g. `../abc/tunes.abc` and then CSV will be created in csvs folder i.e. `../csvs/tunes.csv`
+
+`docker run -it -v ${PWD}/abcs:/abcs/  -v ${PWD}/csvs:/csvs/  abc python generate_csv.py ../abcs/inventions.abc ../csvs/inventions.csv`
+
