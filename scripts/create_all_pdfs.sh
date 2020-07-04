@@ -6,7 +6,7 @@
 #    echo $ABC_FILENAME
 #done
 
-for i in *.abc; do # Whitespace-safe but not recursive.
+for i in ../abcs/*.abc; do # Whitespace-safe but not recursive.
     export ABC_FILENAME=$(echo $i | cut -f 1 -d '.')
     echo $ABC_FILENAME
     ./create_pdf.sh
