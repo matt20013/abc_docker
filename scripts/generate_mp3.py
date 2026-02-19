@@ -35,7 +35,7 @@ mp3s_folder = "/mp3s/" + filename_no_ext
 Path(midi_folder).mkdir(parents=True, exist_ok=True)
 Path(mp3s_folder).mkdir(parents=True, exist_ok=True)
 
-with open(input_path, "r") as f:
+with open(input_path, "r", encoding="utf-8") as f:
 
     lines = f.readlines()
 
