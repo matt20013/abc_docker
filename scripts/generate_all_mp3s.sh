@@ -9,10 +9,10 @@
 #done
 
 for i in abcs/*.abc; do # Whitespace-safe but not recursive.
-    echo $i
-    export ABC_PATH=$i
+    echo "$i"
+    export ABC_PATH="$i"
     export ABC_FILE="${i##*/}"
     export ABC_FILENAME="${ABC_FILE%.*}"
-    echo $ABC_FILENAME
-    python generate_mp3.py ../abcs/${ABC_FILENAME}.abc ../mp3s/
+    echo "$ABC_FILENAME"
+    python generate_mp3.py "../abcs/${ABC_FILENAME}.abc" "../mp3s/"
 done
