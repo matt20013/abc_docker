@@ -1,4 +1,6 @@
 FROM ubuntu:18.04
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
 ENV PYTHONIOENCODING=UTF-8
 RUN apt update
 RUN apt-get install -y abcm2ps abcmidi timidity tclsh lame sox python3 nano ghostscript
