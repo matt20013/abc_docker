@@ -1,4 +1,5 @@
 FROM ubuntu:18.04
+ENV PYTHONIOENCODING=UTF-8
 RUN apt update
 RUN apt-get install -y abcm2ps abcmidi timidity tclsh lame sox python3 nano ghostscript
 RUN cd "$(dirname $(which python3))" && ln -s idle3 idle \
