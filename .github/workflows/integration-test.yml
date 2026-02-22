@@ -1,0 +1,46 @@
+name: Docker CI Integration Test
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  test-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t abc_test_image .
+
+      - name: Setup output directories
+        run: mkdir -p pdfs mp3s csvs
+
+      - name: Test PDF Generation
+        run: |
+          docker run --rm \
+          -v ${{ github.workspace }}/tests:/abcs/ \
+          -v ${{ github.workspace }}/pdfs:/pdfs/ \
+          --env ABC_FILENAME=test_tune \
+          --env ABC_DIR=/abcs/ \
+          --env PDF_DIR=/pdfs/ \
+          abc_test_image /scripts/create_pdf.sh
+
+          # Assert the PDF was actually created
+          test -f pdfs/test_tune.pdf || { echo "PDF generation failed!"; exit 1; }
+
+      - name: Test MP3 Generation
+        run: |
+          docker run --rm \
+          -v ${{ github.workspace }}/tests:/abcs/ \
+          -v ${{ github.workspace }}/mp3s:/mp3s/ \
+          abc_test_image python3 /scripts/generate_mp3.py /abcs/test_tune.abc /mp3s
+
+          # Assert at least one MP3 was created
+          ls mp3s/test_tune/*.mp3 >/dev/null 2>&1 || { echo "MP3 generation failed!"; exit 1; }
+
+      - name: Integration Test Passed
+        run: echo "✅ All media files generated successfully!"

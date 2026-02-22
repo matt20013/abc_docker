@@ -22,6 +22,8 @@ RUN cd "$(dirname $(which python3))" && ln -s idle3 idle \
 COPY dependencies/*.sf2 /usr/share/sound/soundfonts/
 COPY dependencies/*.otf /root/.fonts/
 COPY scripts/ /scripts/
+# Ensure default.fmt is available
+COPY scripts/default.fmt /scripts/default.fmt
 RUN chmod +x /scripts/*.sh
 WORKDIR /scripts
 ENV ABC_FONTS_PATH=/root/.fonts

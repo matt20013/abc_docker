@@ -22,9 +22,12 @@ fi
 
 if test -f "$ABC_DIR/${ABC_FILENAME}.fmt"; then
     abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "$ABC_DIR/${ABC_FILENAME}.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
-else
-    echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" DOES NOT EXIST. Using default.fmt
+elif test -f "$ABC_DIR/default.fmt"; then
+    echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" DOES NOT EXIST. Using default.fmt from ABC_DIR
     abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "$ABC_DIR/default.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
+else
+    echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" and "$ABC_DIR/default.fmt" DO NOT EXIST. Using internal default.fmt
+    abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "/scripts/default.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
 fi
 
 RET_CODE=$?

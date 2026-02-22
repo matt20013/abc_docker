@@ -9,12 +9,13 @@ jobs:
         uses: ./
         with:
           abc_dir: 'tests'
+          file_name: 'test_tune'
           pdf_dir: 'out_pdfs'
           mp3_dir: 'out_mp3s'
           csv_dir: 'out_csvs'
       - name: Verify Output
         run: |
           ls -R
-          test -f out_pdfs/test.pdf
-          test -f out_mp3s/test.mp3
-          test -f out_csvs/test.csv
+          test -f out_pdfs/test_tune.pdf
+          test -f out_mp3s/test_tune/*.mp3 || test -f out_mp3s/test_tune.mp3
+          test -f out_csvs/test_tune.csv
