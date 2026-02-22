@@ -1,3 +1,4 @@
+
 import csv
 import re
 import argparse
@@ -58,7 +59,7 @@ with open(input_path, "r", encoding="utf-8") as f:
 
     #keys = tunes[0].keys()
     keys = ["X","R","T","G","K","M","L","Q","E","I","C","S","Z","F","O","B","N","P","D","H","W","A"]
-    with open(output_path, 'w', encoding="utf-8") as output_file:
+    with open(output_path, 'w') as output_file:
         dict_writer = csv.DictWriter(output_file, keys)
         dict_writer.writeheader()
         dict_writer.writerows(tunes)
