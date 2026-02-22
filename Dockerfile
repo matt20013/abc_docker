@@ -3,7 +3,17 @@ ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 ENV PYTHONIOENCODING=UTF-8
 RUN apt update
-RUN apt-get install -y abcm2ps abcmidi timidity tclsh lame sox python3 nano ghostscript imagemagick
+RUN apt-get install -y abcm2ps timidity tclsh lame sox python3 nano ghostscript imagemagick build-essential git
+
+# Download and install latest abcMIDI from GitHub
+RUN git clone https://github.com/sshlien/abcmidi.git && \
+    cd abcmidi && \
+    ./configure && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf abcmidi
+
 RUN cd "$(dirname $(which python3))" && ln -s idle3 idle \
     && ln -s pydoc3 pydoc \
     && ln -s python3 python \
