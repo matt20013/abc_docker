@@ -9,14 +9,26 @@ inputs:
   file_name:
     description: 'The specific ABC file to process (without extension)'
     required: true
+  pdf_dir:
+    description: 'Directory for output PDFs (relative to repository root)'
+    required: false
+    default: 'pdfs'
+  mp3_dir:
+    description: 'Directory for output MP3s (relative to repository root)'
+    required: false
+    default: 'mp3s'
+  csv_dir:
+    description: 'Directory for output CSVs (relative to repository root)'
+    required: false
+    default: 'csvs'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   env:
     INPUT_ABC_DIR: ${{ inputs.abc_dir }}
     INPUT_FILE_NAME: ${{ inputs.file_name }}
-    INPUT_PDF_DIR: 'pdfs'
-    INPUT_MP3_DIR: 'mp3s'
-    INPUT_CSV_DIR: 'csvs'
+    INPUT_PDF_DIR: ${{ inputs.pdf_dir }}
+    INPUT_MP3_DIR: ${{ inputs.mp3_dir }}
+    INPUT_CSV_DIR: ${{ inputs.csv_dir }}
   args:
     - /scripts/action_entrypoint.sh
