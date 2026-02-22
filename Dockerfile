@@ -2,6 +2,7 @@ FROM ubuntu:22.04
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 ENV PYTHONIOENCODING=UTF-8
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt update
 RUN apt-get install -y abcm2ps timidity tclsh lame sox python3 nano ghostscript imagemagick build-essential git
 
