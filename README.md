@@ -97,6 +97,16 @@ python generate_csv.py <input_abc_path> <output_csv_path>
 python generate_csv.py ../abcs/tunes.abc ../csvs/tunes.csv
 ```
 
+#### 4. Convert JPG to EPS (`convert_jpg_to_eps.sh`)
+
+Converts all JPG files in the `/abcs` directory to EPS files in the same directory. This is useful for including images in ABC files that are processed by tools expecting EPS.
+
+**Usage:**
+
+```bash
+./convert_jpg_to_eps.sh
+```
+
 ### Batch Processing
 
 There are helper scripts to process all ABC files in the `/abcs` directory.
