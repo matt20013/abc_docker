@@ -25,5 +25,5 @@ jobs:
         run: |
           ls -R
           test -f out_pdfs/test.pdf
-          test -f out_mp3s/test.mp3
+          test -f out_mp3s/test/001-Test_Tune.mp3
           test -f out_csvs/test.csv
