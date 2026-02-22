@@ -25,6 +25,9 @@ if test -f "$ABC_DIR/${ABC_FILENAME}.fmt"; then
 elif test -f "$ABC_DIR/default.fmt"; then
     echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" DOES NOT EXIST. Using "$ABC_DIR/default.fmt"
     abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "$ABC_DIR/default.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
+elif test -f "/scripts/default.fmt"; then
+    echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" DOES NOT EXIST. Using "/scripts/default.fmt"
+    abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "/scripts/default.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
 elif test -f "$SCRIPT_DIR/default.fmt"; then
     echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" DOES NOT EXIST. Using "$SCRIPT_DIR/default.fmt"
     abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "$SCRIPT_DIR/default.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"

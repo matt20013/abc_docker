@@ -23,6 +23,5 @@ COPY dependencies/*.sf2 /usr/share/sound/soundfonts/
 COPY dependencies/*.otf /root/.fonts/
 COPY scripts/ /scripts/
 RUN chmod +x /scripts/*.sh
-RUN chmod +r /scripts/default.fmt
 WORKDIR /scripts
 ENV ABC_FONTS_PATH=/root/.fonts
