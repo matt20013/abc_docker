@@ -1,6 +1,8 @@
 #!/bin/bash
 
 ABC_DIR="${ABC_DIR:-/abcs}"
+# Remove trailing slash from ABC_DIR if present
+ABC_DIR="${ABC_DIR%/}"
 PDF_DIR="${PDF_DIR:-/pdfs}"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
