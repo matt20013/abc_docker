@@ -31,7 +31,7 @@ tunes = []
 tune = None
 
 midi_folder = "midi/" + filename_no_ext
-mp3s_folder = "mp3s/" + filename_no_ext
+mp3s_folder = str(Path(output_path).joinpath(filename_no_ext))
 
 Path(midi_folder).mkdir(parents=True, exist_ok=True)
 Path(mp3s_folder).mkdir(parents=True, exist_ok=True)

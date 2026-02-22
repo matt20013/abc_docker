@@ -8,7 +8,10 @@
 #done
 
 for i in ../abcs/*.abc; do # Whitespace-safe but not recursive.
-    export ABC_FILENAME="$(echo "$i" | cut -f 1 -d '.')"
+    echo "$i"
+    export ABC_PATH="$i"
+    export ABC_FILE="${i##*/}"
+    export ABC_FILENAME="${ABC_FILE%.*}"
     echo "$ABC_FILENAME"
     ./create_pdf.sh
 done

@@ -3,7 +3,7 @@ ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 ENV PYTHONIOENCODING=UTF-8
 RUN apt update
-RUN apt-get install -y abcm2ps abcmidi timidity tclsh lame sox python3 nano ghostscript
+RUN apt-get install -y abcm2ps abcmidi timidity tclsh lame sox python3 nano ghostscript imagemagick
 RUN cd "$(dirname $(which python3))" && ln -s idle3 idle \
     && ln -s pydoc3 pydoc \
     && ln -s python3 python \

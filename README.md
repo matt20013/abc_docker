@@ -1,35 +1,177 @@
 # ABC Docker
 
-Docker image including tools to work with ABC music notation
+Docker image including tools to work with ABC music notation.
 
-## Docker
+This image contains:
+- `abcm2ps`: For converting ABC to PostScript/PDF.
+- `abcmidi`: For converting ABC to MIDI.
+- `timidity`: For converting MIDI to WAV.
+- `lame`: For converting WAV to MP3.
+- `sox`: For audio processing.
+- `python3`: For running scripts.
 
-Build Locally
-`docker build . -t abc`
+## Getting Started
 
-Run From Local Build
-`docker run -it -v ${PWD}/abcs:/abcs/ -v ${PWD}/mp3s:/mp3s/ -v ${PWD}/pdfs:/pdfs/ abc bash`
+You can pull the pre-built image from Docker Hub:
 
+```bash
+docker pull matt20013/abc-docker
+```
 
+Or build it locally:
 
-### Create PDF file
+```bash
+docker build . -t abc
+```
 
-`ABC_FILENAME=tunes` where tunes.abc is an ABC file in the `abcs` folder
-This will create a file name `tunes.pdf` in the `pdfs` folder
+## Running Locally
 
-`docker run -it -v ${PWD}/abcs:/abcs/ -v ${PWD}/mp3s:/mp3s/ -v ${PWD}/pdfs:/pdfs/  --env ABC_FILENAME=tunes abc ./create_pdf.sh`
+To run the tools, you generally need to mount your local directories containing ABC files and where you want the output files to go. The scripts inside the container expect the following directory structure by default:
+- `/abcs`: Input ABC files.
+- `/pdfs`: Output PDF files.
+- `/mp3s`: Output MP3 files.
+- `/csvs`: Output CSV files.
 
+Start a shell in the container:
 
-### Create MP3 file
+```bash
+docker run -it \
+  -v ${PWD}/abcs:/abcs \
+  -v ${PWD}/mp3s:/mp3s \
+  -v ${PWD}/pdfs:/pdfs \
+  -v ${PWD}/csvs:/csvs \
+  abc bash
+```
 
-Pass in abc path (relative to scripts folder) e.g. `../abc/tunes.abc and then mp3s will be created in the `mp3s` folder with one mp3 file for each tune in the abc file
+### Scripts
 
-`docker run -it -v ${PWD}/abcs:/abcs/ -v ${PWD}/mp3s:/mp3s/ -v ${PWD}/pdfs:/pdfs/ abc python generate_mp3.py ../abcs/tunes.abc ../mp3s`
+The container includes several scripts in the `/scripts` directory (which is the default working directory).
 
+#### 1. Create PDF (`create_pdf.sh`)
 
-### Create CSV file
+Creates a PDF for a single ABC file.
 
-Pass in abc path (relative to scripts folder) e.g. `../abc/tunes.abc` and then CSV will be created in csvs folder i.e. `../csvs/tunes.csv`
+**Usage:**
 
-`docker run -it -v ${PWD}/abcs:/abcs/  -v ${PWD}/csvs:/csvs/  abc python generate_csv.py ../abcs/inventions.abc ../csvs/inventions.csv`
+Set the `ABC_FILENAME` environment variable to the filename (without extension).
 
+```bash
+export ABC_FILENAME=tunes
+./create_pdf.sh
+```
+
+**Environment Variables:**
+- `ABC_FILENAME`: (Required) The name of the ABC file without extension (e.g., `tunes` for `tunes.abc`).
+- `ABC_DIR`: Directory containing ABC files (default: `/abcs`).
+- `PDF_DIR`: Directory for output PDFs (default: `/pdfs`).
+
+#### 2. Generate MP3 (`generate_mp3.py`)
+
+Generates MP3 files for each tune in an ABC file.
+
+**Usage:**
+
+```bash
+python generate_mp3.py <input_abc_path> <output_folder>
+```
+
+**Example:**
+
+```bash
+python generate_mp3.py ../abcs/tunes.abc ../mp3s
+```
+
+#### 3. Generate CSV (`generate_csv.py`)
+
+Generates a CSV file containing metadata for tunes in an ABC file.
+
+**Usage:**
+
+```bash
+python generate_csv.py <input_abc_path> <output_csv_path>
+```
+
+**Example:**
+
+```bash
+python generate_csv.py ../abcs/tunes.abc ../csvs/tunes.csv
+```
+
+#### 4. Convert JPG to EPS (`convert_jpg_to_eps.sh`)
+
+Converts all JPG files in the `/abcs` directory to EPS files in the same directory. This is useful for including images in ABC files that are processed by tools expecting EPS.
+
+**Usage:**
+
+```bash
+./convert_jpg_to_eps.sh
+```
+
+### Batch Processing
+
+There are helper scripts to process all ABC files in the `/abcs` directory.
+
+- **Create all PDFs:**
+  ```bash
+  ./create_all_pdfs.sh
+  ```
+
+- **Generate all MP3s:**
+  ```bash
+  ./generate_all_mp3s.sh
+  ```
+
+- **Generate all CSVs:**
+  ```bash
+  ./generate_all_csvs.sh
+  ```
+
+## CI / GitHub Actions
+
+You can use this Docker image in your CI/CD pipeline to automatically generate media files from your ABC files.
+
+Below is an example GitHub Actions workflow (`.github/workflows/generate-media.yml`) that generates PDFs and MP3s on every push to the `master` branch.
+
+```yaml
+name: Generate Media
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Create Output Directories
+      run: mkdir -p pdfs mp3s csvs
+
+    - name: Generate Media
+      run: |
+        docker run --rm \
+          -v ${{ github.workspace }}/abcs:/abcs \
+          -v ${{ github.workspace }}/pdfs:/pdfs \
+          -v ${{ github.workspace }}/mp3s:/mp3s \
+          -v ${{ github.workspace }}/csvs:/csvs \
+          matt20013/abc-docker \
+          bash -c "cd /scripts && ./create_all_pdfs.sh && ./generate_all_mp3s.sh"
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: media-files
+        path: |
+          pdfs/
+          mp3s/
+```
+
+This workflow:
+1.  Checks out your repository (assuming your ABC files are in an `abcs` folder in the repo root).
+2.  Creates output directories.
+3.  Runs the Docker container, mounting the relevant directories.
+4.  Executes the batch processing scripts inside the container.
+5.  Uploads the generated PDFs and MP3s as build artifacts.
