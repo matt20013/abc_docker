@@ -1,3 +1,4 @@
+
 #!/usr/bin/env tclsh
 
 # Create a tune index from the abcm2ps PostScript output
@@ -109,6 +110,7 @@ proc main {} {
     set margin {}
     set new_version 0
     set w 595
+    set doc_level 0
 
     # copy the header
     while {[gets $in line] >= 0} {
@@ -136,7 +138,13 @@ proc main {} {
 	set before [tell $in]
     }
     while {[gets $in line] >= 0} {
-	if {[string compare [string range $line 0 7] {%%Page: }] == 0} {
+	if {[string compare [string range $line 0 16] {%%BeginDocument: }] == 0} {
+	    incr doc_level
+	} elseif {[string compare [string range $line 0 12] {%%EndDocument}] == 0} {
+	    if {$doc_level > 0} {
+		incr doc_level -1
+	    }
+	} elseif {[string compare [string range $line 0 7] {%%Page: }] == 0} {
 	    set page [lindex [split $line] 1]
 	    if {[string length $gsave] == 0} {
 		if {!$before} {
@@ -317,7 +325,9 @@ proc main {} {
 	      }
 	    }
 	} elseif {[string compare [string range $line 0 8] {%%Trailer}] == 0} {
-	    break
+	    if {$doc_level == 0} {
+		break
+	    }
 	}
 	if {!$before} {
 	    puts $out $line
