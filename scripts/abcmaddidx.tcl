@@ -149,25 +149,41 @@ proc main {} {
 		    }
 		    gets $in line
 		}
-		set gsave $line
-		while {1} {
+		# Validation
+		set candidate_valid 0
+		set tmp_gsave [split $line]
+		if {[llength $tmp_gsave] >= 2} {
+		    if {[string is double -strict [lindex $tmp_gsave end-1]]} {
+			set candidate_valid 1
+		    }
+		}
+
+		if {$candidate_valid} {
+		    set gsave $line
+		    while {1} {
+			if {!$before} {
+			    puts $out $line
+			}
+			if {[gets $in line] < 0} break
+			set tmp [split $line]
+			if {[string compare [string range $line 0 11] {% --- width }] == 0} {
+			    if {$xmid == 0} {
+				set xmid [expr {[lindex $line 3] * 0.5}]
+			    }
+			}
+			switch [lindex $tmp end] {
+			    scale {set scale $line}
+			    T {
+				if {[lindex $line 0] == 0} continue
+				set margin $line
+				break
+			    }
+			}
+		    }
+		} else {
+		    # Invalid gsave candidate. Just print and continue.
 		    if {!$before} {
 			puts $out $line
-		    }
-		    if {[gets $in line] < 0} break
-		    set tmp [split $line]
-		    if {[string compare [string range $line 0 11] {% --- width }] == 0} {
-			if {$xmid == 0} {
-			    set xmid [expr {[lindex $line 3] * 0.5}]
-			}
-		    }
-		    switch [lindex $tmp end] {
-			scale {set scale $line}
-			T {
-			    if {[lindex $line 0] == 0} continue
-			    set margin $line
-			    break
-			}
 		    }
 		}
 	    }
