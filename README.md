@@ -126,6 +126,10 @@ There are helper scripts to process all ABC files in the `/abcs` directory.
   ./generate_all_csvs.sh
   ```
 
+### Clean up ABC files
+Fixes Windows line endings (CRLF) and trailing spaces that cause `abc2midi` to crash.
+`docker run -it -v ${PWD}/abcs:/abcs/ abc ./clean_abc.sh ../abcs/tunes.abc`
+
 ## CI / GitHub Actions
 
 You can use this Docker image in your CI/CD pipeline to automatically generate media files from your ABC files.
