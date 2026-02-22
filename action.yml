@@ -1,0 +1,25 @@
+name: 'ABC Music Build'
+description: 'Builds PDFs, MP3s, and CSVs from ABC files using abc-docker tools'
+author: 'Matt'
+inputs:
+  abc_dir:
+    description: 'Directory containing ABC files (relative to repository root)'
+    required: false
+    default: 'abcs'
+  pdf_dir:
+    description: 'Directory for output PDFs (relative to repository root)'
+    required: false
+    default: 'pdfs'
+  mp3_dir:
+    description: 'Directory for output MP3s (relative to repository root)'
+    required: false
+    default: 'mp3s'
+  csv_dir:
+    description: 'Directory for output CSVs (relative to repository root)'
+    required: false
+    default: 'csvs'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - /scripts/action_entrypoint.sh

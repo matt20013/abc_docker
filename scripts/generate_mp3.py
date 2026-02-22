@@ -2,7 +2,12 @@
 import csv
 import re
 import argparse
+import sys
+import subprocess
 from pathlib import Path
+
+# Ensure immediate output flushing
+sys.stdout.reconfigure(line_buffering=True)
 
 parser = argparse.ArgumentParser(description='Generate CSV file of ABC notation metadata')
 parser.add_argument('input_path',
@@ -19,6 +24,7 @@ args = parser.parse_args()
 input_path = args.input_path
 output_path = args.output_path
 
+print(f"Processing: {input_path}")
 
 filename_no_ext = Path(input_path).stem
 
@@ -67,7 +73,24 @@ with open(input_path, "r", encoding="utf-8") as f:
 
             tune[key] = value
 
-import subprocess
+    # Add the last tune
+    if tune is not None:
+        tunes.append(tune)
+        abc_path = input_path
+        midi_path = "{midi_folder}/{X}.mid".format(midi_folder=midi_folder,X=tune["X"])
+        raw_wav_path = "{mp3s_folder}/{X}.raw.wav".format(mp3s_folder=mp3s_folder,X=tune["X"])
+        wav_path = "{mp3s_folder}/{X}.wav".format(mp3s_folder=mp3s_folder,X=tune["X"])
+        mp3_path = "{mp3s_folder}/{X}-{tune_title}.mp3".format(mp3s_folder=mp3s_folder,X=str(int(tune["X"])).zfill(3),tune_title=tune["T"].replace(" ","_").replace("'","").replace(",","").replace("(","").replace(")","") )
+        abc_to_midi = "abc2midi {abc_path} {X} -o {midi_path} -Q 150".format(abc_path=abc_path, midi_path=midi_path,X=tune["X"])
+        mid_to_wave = "timidity {midi_path} -Ow -o {raw_wav_path}".format(midi_path=midi_path,raw_wav_path=raw_wav_path)
+        remove_silence = "sox {raw_wav_path} {wav_path} silence 1 0.1 1% -1 0.1 1%".format(raw_wav_path=raw_wav_path,wav_path=wav_path)
+        wav_to_mp3 = "lame {wav_path} -b 64 {mp3_path}".format(wav_path=wav_path,mp3_path=mp3_path)
+        remove_raw_wav = "rm {raw_wav_path}".format(raw_wav_path=raw_wav_path)
+        remove_wav = "rm {wav_path}".format(wav_path=wav_path)
+        remove_mid = "rm {midi_path}".format(midi_path=midi_path)
+        commands.extend([abc_to_midi, mid_to_wave,remove_silence,wav_to_mp3,remove_mid,remove_raw_wav,remove_wav])
+
+print(f"Commands to execute: {len(commands)}")
 
 for command in commands:
 
@@ -77,8 +100,21 @@ for command in commands:
            stderr=subprocess.STDOUT)
 
     stdout,stderr = out.communicate()
-    print(stdout)
-    print(stderr)
+    if stdout:
+        print(stdout.decode('utf-8', errors='replace'))
+    if stderr:
+        print(stderr.decode('utf-8', errors='replace'))
+
+    if out.returncode != 0:
+        print(f"Error executing command: {command}")
+        print(f"Return code: {out.returncode}")
+        # We don't exit immediately to allow cleanup or subsequent commands,
+        # but for CI it is better to fail.
+        # However, removing temp files (rm ...) might fail if previous steps failed.
+        # So we should be careful.
+        # But for abc2midi, timidity, etc., failure is bad.
+        if "rm " not in command:
+             sys.exit(1)
 
 #    with open(command_path,'w') as command_file:
 #        commands = map(lambda x: x + '\n', commands)
