@@ -1,18 +1,14 @@
 #!/bin/bash
 
-#find . -maxdepth 1 -type f -name "*.txt"
+ABC_DIR="${ABC_DIR:-../abcs}"
+CSV_DIR="${CSV_DIR:-../csvs}"
 
-#shopt -s globstar
-#for i in **/*.abc; do # Whitespace-safe and recursive
-#    ABC_FILENAME=$(echo $i | cut -f 1 -d '.')
-#    echo $ABC_FILENAME
-#done
-
-for i in ../abcs/*.abc; do # Whitespace-safe but not recursive.
+for i in "$ABC_DIR"/*.abc; do # Whitespace-safe but not recursive.
+    [ -e "$i" ] || continue
     echo "$i"
     export ABC_PATH="$i"
     export ABC_FILE="${i##*/}"
     export ABC_FILENAME="${ABC_FILE%.*}"
     echo "$ABC_FILENAME"
-    python generate_csv.py "../abcs/${ABC_FILENAME}.abc" "../csvs/${ABC_FILENAME}.csv"
+    python generate_csv.py "$i" "$CSV_DIR/${ABC_FILENAME}.csv"
 done
