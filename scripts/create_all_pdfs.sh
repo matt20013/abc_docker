@@ -1,13 +1,10 @@
 #!/bin/bash
-#find . -maxdepth 1 -type f -name "*.txt"
+ABC_DIR="${ABC_DIR:-../abcs}"
+PDF_DIR="${PDF_DIR:-../pdfs}"
+export PDF_DIR
 
-#shopt -s globstar
-#for i in **/*.abc; do # Whitespace-safe and recursive
-#    ABC_FILENAME=$(echo $i | cut -f 1 -d '.')
-#    echo $ABC_FILENAME
-#done
-
-for i in ../abcs/*.abc; do # Whitespace-safe but not recursive.
+for i in "$ABC_DIR"/*.abc; do # Whitespace-safe but not recursive.
+    [ -e "$i" ] || continue
     echo "$i"
     export ABC_PATH="$i"
     export ABC_FILE="${i##*/}"

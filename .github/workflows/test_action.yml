@@ -1,0 +1,29 @@
+name: Test Action
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create test data
+        run: |
+          mkdir -p abcs
+          echo "X:1" > abcs/test.abc
+          echo "T:Test Tune" >> abcs/test.abc
+          echo "M:4/4" >> abcs/test.abc
+          echo "L:1/4" >> abcs/test.abc
+          echo "K:C" >> abcs/test.abc
+          echo "CDEF|GABc|]" >> abcs/test.abc
+      - name: Run Action
+        uses: ./
+        with:
+          abc_dir: 'abcs'
+          pdf_dir: 'out_pdfs'
+          mp3_dir: 'out_mp3s'
+          csv_dir: 'out_csvs'
+      - name: Verify Output
+        run: |
+          ls -R
+          test -f out_pdfs/test.pdf
+          test -f out_mp3s/test.mp3
+          test -f out_csvs/test.csv
