@@ -27,8 +27,11 @@ else
     abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "$ABC_DIR/default.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
 fi
 
-if [ $? -eq 0 ] && [ -s "$PDF_DIR/${ABC_FILENAME}_raw.ps" ]; then
+RET_CODE=$?
+if [ $RET_CODE -eq 0 ] && [ -s "$PDF_DIR/${ABC_FILENAME}_raw.ps" ]; then
     echo "$PDF_DIR/${ABC_FILENAME}_raw.ps" created successfully
+elif [ -n "$FORCE_CREATION" ] && [ "$FORCE_CREATION" != "0" ] && [ -s "$PDF_DIR/${ABC_FILENAME}_raw.ps" ]; then
+    echo "WARNING: abcm2ps exited with code $RET_CODE but FORCE_CREATION is set. Proceeding..."
 else
     echo FAILED to create "$PDF_DIR/${ABC_FILENAME}_raw.ps"
     exit 1
