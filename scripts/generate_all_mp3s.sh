@@ -8,7 +8,7 @@
 #    echo $ABC_FILENAME
 #done
 
-for i in abcs/*.abc; do # Whitespace-safe but not recursive.
+for i in ../abcs/*.abc; do # Whitespace-safe but not recursive.
     echo "$i"
     export ABC_PATH="$i"
     export ABC_FILE="${i##*/}"

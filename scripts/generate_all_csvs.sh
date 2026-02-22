@@ -8,11 +8,11 @@
 #    echo $ABC_FILENAME
 #done
 
-for i in abcs/*.abc; do # Whitespace-safe but not recursive.
+for i in ../abcs/*.abc; do # Whitespace-safe but not recursive.
     echo "$i"
     export ABC_PATH="$i"
     export ABC_FILE="${i##*/}"
     export ABC_FILENAME="${ABC_FILE%.*}"
     echo "$ABC_FILENAME"
-    python generate_csv.py "abcs/${ABC_FILENAME}.abc" "csvs/${ABC_FILENAME}.csv"
+    python generate_csv.py "../abcs/${ABC_FILENAME}.abc" "../csvs/${ABC_FILENAME}.csv"
 done
