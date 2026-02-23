@@ -14,10 +14,10 @@ import string,re,sys
 
 def main():
     "Script to create sets from Paul Hardy's Session Tunebook."
-    inabcprifilename = r"C:\Users\Public\Documents\Music\ABC\PGH_Tunebooks\PGH_Session_Tunebook\pgh_session_tunebook.abc"
-    inabcannfilename = r"C:\Users\Public\Documents\Music\ABC\PGH_Tunebooks\PGH_Annex_Tunebook\pgh_annex_tunebook.abc"
-    indefnfilename = r"C:\Users\Public\Documents\Music\ABC\PGH_Tunebooks\PGH_Sets_Tunebook\pgh_sets_tunebook.abct"
-    outabcfilename = r"C:\Users\Public\Documents\Music\ABC\PGH_Tunebooks\PGH_Sets_Tunebook\pgh_sets_tunebook.abc"
+    inabcprifilename = "C:\Users\Public\Documents\Music\ABC\PGH_Tunebooks\PGH_Session_Tunebook\pgh_session_tunebook.abc"
+    inabcannfilename = "C:\Users\Public\Documents\Music\ABC\PGH_Tunebooks\PGH_Annex_Tunebook\pgh_annex_tunebook.abc"
+    indefnfilename = "C:\Users\Public\Documents\Music\ABC\PGH_Tunebooks\PGH_Sets_Tunebook\pgh_sets_tunebook.abct"
+    outabcfilename = "C:\Users\Public\Documents\Music\ABC\PGH_Tunebooks\PGH_Sets_Tunebook\pgh_sets_tunebook.abc"
     try:
         indefnfile = open(indefnfilename, 'r')  
     except IOError:

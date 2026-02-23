@@ -35,17 +35,11 @@ fi
 if test -f "$ABC_DIR/${ABC_FILENAME}.fmt"; then
     abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "$ABC_DIR/${ABC_FILENAME}.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
 elif test -f "$ABC_DIR/default.fmt"; then
-    echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" DOES NOT EXIST. Using "$ABC_DIR/default.fmt"
+    echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" DOES NOT EXIST. Using default.fmt from ABC_DIR
     abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "$ABC_DIR/default.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
-elif test -f "/scripts/default.fmt"; then
-    echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" DOES NOT EXIST. Using "/scripts/default.fmt"
-    abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "/scripts/default.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
-elif test -f "$SCRIPT_DIR/default.fmt"; then
-    echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" DOES NOT EXIST. Using "$SCRIPT_DIR/default.fmt"
-    abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "$SCRIPT_DIR/default.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
 else
-    echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" AND default.fmt DO NOT EXIST. Running without format file.
-    abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" "$ABC_DIR/${ABC_FILENAME}.abc"
+    echo WARNING "$ABC_DIR/${ABC_FILENAME}.fmt" and "$ABC_DIR/default.fmt" DO NOT EXIST. Using internal default.fmt
+    abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "/scripts/default.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
 fi
 
 RET_CODE=$?

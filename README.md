@@ -179,20 +179,3 @@ This workflow:
 3.  Runs the Docker container, mounting the relevant directories.
 4.  Executes the batch processing scripts inside the container.
 5.  Uploads the generated PDFs and MP3s as build artifacts.
-
-## Acknowledgements
-
-This project makes use of the following tools and resources:
-
-*   **[abcmidi](https://github.com/sshlien/abcmidi)**: For converting ABC to MIDI.
-*   **[abcm2ps](http://moinejf.free.fr/)**: For converting ABC to PostScript/PDF.
-*   **[TiMidity++](http://timidity.sourceforge.net/)**: For converting MIDI to WAV.
-*   **[LAME](https://lame.sourceforge.io/)**: For converting WAV to MP3.
-*   **[SoX](http://sox.sourceforge.net/)**: For audio processing.
-*   **[ImageMagick](https://imagemagick.org/)**: For image conversion.
-*   **[Ubuntu](https://ubuntu.com/)**: Base image for the container.
-
-### Fonts and Soundfonts
-
-*   **[Petaluma Font](https://github.com/steinbergmedia/petaluma)**: Used for music notation (SIL Open Font License).
-*   **[Upright Piano KW Soundfont](https://freepats.zenvoid.org/Piano/acoustic-grand-piano.html)**: Used for MIDI playback (CC0 1.0).

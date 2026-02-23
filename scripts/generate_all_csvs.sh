@@ -1,4 +1,5 @@
 #!/bin/bash
+
 ABC_DIR="${ABC_DIR:-../abcs}"
 CSV_DIR="${CSV_DIR:-../csvs}"
 
