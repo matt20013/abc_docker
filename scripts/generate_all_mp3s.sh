@@ -1,5 +1,4 @@
 #!/bin/bash
-
 ABC_DIR="${ABC_DIR:-../abcs}"
 MP3_DIR="${MP3_DIR:-../mp3s}"
 

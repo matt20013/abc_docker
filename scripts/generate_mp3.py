@@ -2,8 +2,13 @@
 import csv
 import re
 import argparse
+import sys
+import subprocess
 from pathlib import Path
 import subprocess
+
+# Ensure immediate output flushing
+sys.stdout.reconfigure(line_buffering=True)
 
 parser = argparse.ArgumentParser(description='Generate CSV file of ABC notation metadata')
 parser.add_argument('input_path',
@@ -20,6 +25,7 @@ args = parser.parse_args()
 input_path = args.input_path
 output_path = args.output_path
 
+print(f"Processing: {input_path}")
 
 filename_no_ext = Path(input_path).stem
 
@@ -73,6 +79,7 @@ with open(input_path, "r", encoding="utf-8") as f:
 
     process_tune(tune)
 
+print(f"Commands to execute: {len(commands)}")
 
 for command in commands:
 
@@ -82,8 +89,21 @@ for command in commands:
            stderr=subprocess.STDOUT)
 
     stdout,stderr = out.communicate()
-    print(stdout)
-    print(stderr)
+    if stdout:
+        print(stdout.decode('utf-8', errors='replace'))
+    if stderr:
+        print(stderr.decode('utf-8', errors='replace'))
+
+    if out.returncode != 0:
+        print(f"Error executing command: {command}")
+        print(f"Return code: {out.returncode}")
+        # We don't exit immediately to allow cleanup or subsequent commands,
+        # but for CI it is better to fail.
+        # However, removing temp files (rm ...) might fail if previous steps failed.
+        # So we should be careful.
+        # But for abc2midi, timidity, etc., failure is bad.
+        if "rm " not in command:
+             sys.exit(1)
 
 #    with open(command_path,'w') as command_file:
 #        commands = map(lambda x: x + '\n', commands)

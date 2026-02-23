@@ -8,7 +8,7 @@ inputs:
     default: 'abcs'
   file_name:
     description: 'The specific ABC file to process (without extension)'
-    required: true
+    required: false
   pdf_dir:
     description: 'Directory for output PDFs (relative to repository root)'
     required: false
