@@ -1,31 +1,22 @@
-name: 'ABC Music Build'
-description: 'Builds PDFs, MP3s, and CSVs from ABC files using abc-docker tools'
-author: 'Matt'
+# action.yml
+name: 'ABC Tunes Compiler'
+description: 'Compiles ABC notation files into high-quality PDFs and MP3s.'
+author: 'matt20013'
+
 inputs:
   abc_dir:
-    description: 'Directory containing ABC files (relative to repository root)'
+    description: 'The folder containing your .abc files'
     required: false
     default: 'abcs'
   file_name:
     description: 'The specific ABC file to process (without extension)'
-    required: false
-  pdf_dir:
-    description: 'Directory for output PDFs (relative to repository root)'
-    required: false
-    default: 'pdfs'
-  mp3_dir:
-    description: 'Directory for output MP3s (relative to repository root)'
-    required: false
-    default: 'mp3s'
-  csv_dir:
-    description: 'Directory for output CSVs (relative to repository root)'
-    required: false
-    default: 'csvs'
+    required: true
+
 runs:
   using: "composite"
   steps:
-    - name: Pull latest ABC Docker Engine
-      run: docker pull ghcr.io/matt20013/abc_docker:latest
+    - name: Pull version-matched ABC Docker Engine
+      run: docker pull ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }}
       shell: bash
 
     - name: Run PDF Generation
@@ -35,7 +26,7 @@ runs:
         -v ${{ github.workspace }}/pdfs:/pdfs/ \
         --env ABC_FILENAME=${{ inputs.file_name }} \
         --env GIT_HASH=${GITHUB_SHA::7} \
-        ghcr.io/matt20013/abc_docker:latest /scripts/create_pdf.sh
+        ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} /scripts/create_pdf.sh
       shell: bash
 
     - name: Run MP3 Generation
@@ -43,5 +34,5 @@ runs:
         docker run --rm \
         -v ${{ github.workspace }}/${{ inputs.abc_dir }}:/abcs/ \
         -v ${{ github.workspace }}/mp3s:/mp3s/ \
-        ghcr.io/matt20013/abc_docker:latest python3 /scripts/generate_mp3.py /abcs/${{ inputs.file_name }}.abc /mp3s
+        ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} python3 /scripts/generate_mp3.py /abcs/${{ inputs.file_name }}.abc /mp3s
       shell: bash

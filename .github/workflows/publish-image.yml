@@ -2,18 +2,13 @@ name: Build and Publish Docker Image
 
 on:
   push:
-    branches:
-      - master
-    # Only run this if we actually change the environment
-    paths:
-      - 'Dockerfile'
-      - 'scripts/**'
-      - 'dependencies/**'
+    branches: [ 'master' ]
+  release:
+    types: [ published ]
 
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
-    # This permission is required to let GitHub Actions push to GHCR
     permissions:
       contents: read
       packages: write
@@ -29,10 +24,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          # Tags it as ghcr.io/matt20013/abc_docker:latest
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
