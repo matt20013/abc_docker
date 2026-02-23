@@ -23,7 +23,7 @@ runs:
       run: |
         docker run --rm \
         -v ${{ github.workspace }}/${{ inputs.abc_dir }}:/abcs/ \
-        -v ${{ github.workspace }}/${{ inputs.pdf_dir }}:/pdfs/ \
+        -v ${{ github.workspace }}/pdfs:/pdfs/ \
         --env ABC_FILENAME=${{ inputs.file_name }} \
         --env GIT_HASH=${GITHUB_SHA::7} \
         ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} /scripts/create_pdf.sh
@@ -35,12 +35,4 @@ runs:
         -v ${{ github.workspace }}/${{ inputs.abc_dir }}:/abcs/ \
         -v ${{ github.workspace }}/mp3s:/mp3s/ \
         ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} python3 /scripts/generate_mp3.py /abcs/${{ inputs.file_name }}.abc /mp3s
-      shell: bash
-
-    - name: Run CSV Generation
-      run: |
-        docker run --rm \
-        -v ${{ github.workspace }}/${{ inputs.abc_dir }}:/abcs/ \
-        -v ${{ github.workspace }}/${{ inputs.csv_dir }}:/csvs/ \
-        ghcr.io/matt20013/abc_docker:latest python3 /scripts/generate_csv.py /abcs/${{ inputs.file_name }}.abc /csvs/${{ inputs.file_name }}.csv
       shell: bash
