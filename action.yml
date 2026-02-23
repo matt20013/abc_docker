@@ -1,9 +1,9 @@
 name: 'ABC Tunes Compiler'
-description: 'Compiles ABC notation files into high-quality PDFs and MP3s.'
+description: 'Builds PDFs, MP3s, and CSVs from ABC files using abc-docker tools'
 author: 'Matt'
 inputs:
   abc_dir:
-    description: 'The folder containing your .abc files'
+    description: 'Directory containing ABC files (relative to repository root)'
     required: false
     default: 'abcs'
   file_name:
