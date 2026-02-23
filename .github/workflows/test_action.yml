@@ -13,9 +13,11 @@ jobs:
           file_name: 'test_tune'
           pdf_dir: 'test_data/pdfs'
           mp3_dir: 'test_data/mp3s'
+          csv_dir: 'test_data/csvs'
       - name: Verify Output (Single File)
         run: |
           ls -R test_data
           test -f test_data/pdfs/test_tune.pdf
           # Check for MP3 (file structure might vary based on script logic)
           find test_data/mp3s -name "*.mp3"
+          test -f test_data/csvs/test_tune.csv
