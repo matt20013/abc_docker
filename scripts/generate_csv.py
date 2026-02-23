@@ -57,6 +57,9 @@ with open(input_path, "r", encoding="utf-8") as f:
 
             tune[key] = value
 
+    if tune is not None:
+        tunes.append(tune)
+
     #keys = tunes[0].keys()
     keys = ["X","R","T","G","K","M","L","Q","E","I","C","S","Z","F","O","B","N","P","D","H","W","A"]
     with open(output_path, 'w') as output_file:
