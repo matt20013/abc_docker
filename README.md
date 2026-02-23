@@ -178,7 +178,7 @@ This workflow:
 2.  Creates output directories.
 3.  Runs the Docker container, mounting the relevant directories.
 4.  Executes the batch processing scripts inside the container.
-5.  Uploads the generated PDFs and MP3s as build artifacts.
+5.  Uploads the generated PDFs and MP3s as build artifacts
 
 ## Acknowledgements
 
