@@ -5,7 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       # Test 1: Single file processing (HEAD)
       - name: Run Action (Single File)
         uses: ./

@@ -9,6 +9,14 @@ inputs:
   file_name:
     description: 'The specific ABC file to process (without extension)'
     required: false
+name: 'ABC Music Build'
+description: 'Builds PDFs, MP3s, and CSVs from ABC files using abc-docker tools'
+author: 'Matt'
+inputs:
+  abc_dir:
+    description: 'Directory containing ABC files (relative to repository root)'
+    required: false
+    default: 'abcs'
   pdf_dir:
     description: 'Directory for output PDFs (relative to repository root)'
     required: false

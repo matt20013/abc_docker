@@ -5,6 +5,7 @@ set -e
 WORKSPACE="${GITHUB_WORKSPACE:-.}"
 
 # Inputs from action.yml are passed as env vars if mapped.
+
 # We expect INPUT_ABC_DIR, INPUT_PDF_DIR, INPUT_MP3_DIR, INPUT_CSV_DIR, and optionally INPUT_FILE_NAME.
 
 # Resolve absolute paths
@@ -26,17 +27,6 @@ export CSV_DIR=$(resolve_path "${INPUT_CSV_DIR:-csvs}")
 # Backward compatibility for batch processing if FILE_NAME is not set
 ABC_FILENAME="${INPUT_FILE_NAME}"
 
-echo "Processing ABC files in: $ABC_DIR"
-echo "Outputting PDFs to: $PDF_DIR"
-echo "Outputting MP3s to: $MP3_DIR"
-echo "Outputting CSVs to: $CSV_DIR"
-
-mkdir -p "$PDF_DIR"
-mkdir -p "$MP3_DIR"
-mkdir -p "$CSV_DIR"
-
-# Ensure /scripts is in path or we call them directly
-# We are likely running from WORKSPACE if it's an action, but scripts are in /scripts
 cd /scripts
 
 # If filename is provided, process single file
