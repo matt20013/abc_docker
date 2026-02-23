@@ -48,6 +48,7 @@ jobs:
             type=semver,pattern={{version}},value=${{ needs.release-please.outputs.tag_name }}
             type=semver,pattern={{major}}.{{minor}},value=${{ needs.release-please.outputs.tag_name }}
             type=semver,pattern={{major}},value=${{ needs.release-please.outputs.tag_name }}
+            type=raw,value=${{ needs.release-please.outputs.tag_name }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
