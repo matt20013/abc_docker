@@ -3,8 +3,6 @@ name: Build and Publish Docker Image
 on:
   push:
     branches: [ 'master' ]
-  release:
-    types: [ published ]
 
 jobs:
   build-and-push-image:
@@ -28,12 +26,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ghcr.io/matt20013/abc_docker
           tags: |
             type=ref,event=branch
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
