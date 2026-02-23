@@ -1,8 +1,20 @@
 #!/bin/bash
 
 ABC_DIR="${ABC_DIR:-/abcs}"
+# Remove trailing slash from ABC_DIR if present
+ABC_DIR="${ABC_DIR%/}"
 PDF_DIR="${PDF_DIR:-/pdfs}"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+echo "DEBUG: User: $(whoami)"
+echo "DEBUG: Listing /scripts:"
+ls -la /scripts
+echo "DEBUG: Listing $ABC_DIR:"
+ls -la "$ABC_DIR" || echo "Failed to list $ABC_DIR"
+echo "DEBUG: Checking default.fmt:"
+stat /scripts/default.fmt || echo "Failed to stat /scripts/default.fmt"
+echo "DEBUG: Checking input abc:"
+stat "$ABC_DIR/${ABC_FILENAME}.abc" || echo "Failed to stat input abc"
 
 if [[ -z "$ABC_FILENAME" ]]; then
    echo "Empty ABC_FILENAME please set"
