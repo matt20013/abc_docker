@@ -13,8 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build Docker Image
-        run: docker build -t abc_test_image .
+      - name: Pull latest ABC Docker Engine
+        run: docker pull ghcr.io/matt20013/abc_docker:latest
 
       - name: Setup output directories
         run: |
@@ -30,7 +30,7 @@ jobs:
           --env ABC_FILENAME=test_tune \
           --env ABC_DIR=/abcs \
           --env PDF_DIR=/pdfs \
-          abc_test_image /scripts/create_pdf.sh
+          ghcr.io/matt20013/abc_docker:latest /scripts/create_pdf.sh
 
           # Assert the PDF was actually created
           test -f test_data/pdfs/test_tune.pdf || { echo "PDF generation failed!"; exit 1; }
@@ -40,7 +40,7 @@ jobs:
           docker run --rm \
           -v ${{ github.workspace }}/test_data/abcs:/abcs \
           -v ${{ github.workspace }}/test_data/mp3s:/mp3s \
-          abc_test_image python3 /scripts/generate_mp3.py /abcs/test_tune.abc /mp3s
+          ghcr.io/matt20013/abc_docker:latest python3 /scripts/generate_mp3.py /abcs/test_tune.abc /mp3s
 
           # Assert at least one MP3 was created
           ls test_data/mp3s/test_tune/*.mp3 >/dev/null 2>&1 || { echo "MP3 generation failed!"; exit 1; }

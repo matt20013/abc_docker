@@ -1,14 +1,3 @@
-name: 'ABC Tunes Compiler'
-description: 'Compiles ABC notation files into high-quality PDFs and MP3s.'
-author: 'Matt'
-inputs:
-  abc_dir:
-    description: 'The folder containing your .abc files'
-    required: false
-    default: 'abcs'
-  file_name:
-    description: 'The specific ABC file to process (without extension)'
-    required: false
 name: 'ABC Music Build'
 description: 'Builds PDFs, MP3s, and CSVs from ABC files using abc-docker tools'
 author: 'Matt'
@@ -30,13 +19,26 @@ inputs:
     required: false
     default: 'csvs'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  env:
-    INPUT_ABC_DIR: ${{ inputs.abc_dir }}
-    INPUT_FILE_NAME: ${{ inputs.file_name }}
-    INPUT_PDF_DIR: ${{ inputs.pdf_dir }}
-    INPUT_MP3_DIR: ${{ inputs.mp3_dir }}
-    INPUT_CSV_DIR: ${{ inputs.csv_dir }}
-  args:
-    - /scripts/action_entrypoint.sh
+  using: "composite"
+  steps:
+    - name: Pull latest ABC Docker Engine
+      run: docker pull ghcr.io/matt20013/abc_docker:latest
+      shell: bash
+
+    - name: Run PDF Generation
+      run: |
+        docker run --rm \
+        -v ${{ github.workspace }}/${{ inputs.abc_dir }}:/abcs/ \
+        -v ${{ github.workspace }}/pdfs:/pdfs/ \
+        --env ABC_FILENAME=${{ inputs.file_name }} \
+        --env GIT_HASH=${GITHUB_SHA::7} \
+        ghcr.io/matt20013/abc_docker:latest /scripts/create_pdf.sh
+      shell: bash
+
+    - name: Run MP3 Generation
+      run: |
+        docker run --rm \
+        -v ${{ github.workspace }}/${{ inputs.abc_dir }}:/abcs/ \
+        -v ${{ github.workspace }}/mp3s:/mp3s/ \
+        ghcr.io/matt20013/abc_docker:latest python3 /scripts/generate_mp3.py /abcs/${{ inputs.file_name }}.abc /mp3s
+      shell: bash
