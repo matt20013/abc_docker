@@ -11,6 +11,14 @@ inputs:
   file_name:
     description: 'The specific ABC file to process (without extension)'
     required: true
+  pdf_dir:
+    description: 'The output folder for PDF files'
+    required: false
+    default: 'pdfs'
+  mp3_dir:
+    description: 'The output folder for MP3 files'
+    required: false
+    default: 'mp3s'
 
 runs:
   using: "composite"
@@ -21,15 +29,15 @@ runs:
 
     - name: Create Output Directories
       run: |
-        mkdir -p "${{ github.workspace }}/pdfs"
-        mkdir -p "${{ github.workspace }}/mp3s"
+        mkdir -p "${{ github.workspace }}/${{ inputs.pdf_dir }}"
+        mkdir -p "${{ github.workspace }}/${{ inputs.mp3_dir }}"
       shell: bash
 
     - name: Run PDF Generation
       run: |
         docker run --rm \
         -v "${{ github.workspace }}/${{ inputs.abc_dir }}":/abcs/ \
-        -v "${{ github.workspace }}/pdfs":/pdfs/ \
+        -v "${{ github.workspace }}/${{ inputs.pdf_dir }}":/pdfs/ \
         --env ABC_FILENAME="${{ inputs.file_name }}" \
         --env GIT_HASH=${GITHUB_SHA::7} \
         ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} /scripts/create_pdf.sh
@@ -39,6 +47,6 @@ runs:
       run: |
         docker run --rm \
         -v "${{ github.workspace }}/${{ inputs.abc_dir }}":/abcs/ \
-        -v "${{ github.workspace }}/mp3s":/mp3s/ \
+        -v "${{ github.workspace }}/${{ inputs.mp3_dir }}":/mp3s/ \
         ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} python3 /scripts/generate_mp3.py "/abcs/${{ inputs.file_name }}.abc" /mp3s
       shell: bash
