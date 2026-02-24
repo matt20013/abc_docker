@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.1](https://github.com/matt20013/abc_docker/compare/v1.3.0...v1.3.1) (2026-02-24)
+
+
+### Bug Fixes
+
+* Merge pull request [#51](https://github.com/matt20013/abc_docker/issues/51) from matt20013/fix-petaluma-font-847110796616442383 ([74e2807](https://github.com/matt20013/abc_docker/commit/74e28075c8a3fed4367d59b81ae62ca5ac242b9e))
+* restore Petaluma font configuration ([74e2807](https://github.com/matt20013/abc_docker/commit/74e28075c8a3fed4367d59b81ae62ca5ac242b9e))
+* restore Petaluma font configuration in default.fmt ([f32e656](https://github.com/matt20013/abc_docker/commit/f32e6568041deee4e53029e3cbc660245ccd9e01))
+
 ## [1.3.0](https://github.com/matt20013/abc_docker/compare/v1.2.0...v1.3.0) (2026-02-24)
 
 
