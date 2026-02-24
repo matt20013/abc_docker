@@ -32,6 +32,9 @@ if [[ -z "$ABC_FONTS_PATH" ]]; then
    ABC_FONTS_PATH=/Library/Fonts
 fi
 
+# Ensure output directory exists (for subdirectories in ABC_FILENAME)
+mkdir -p "$(dirname "$PDF_DIR/${ABC_FILENAME}_raw.ps")"
+
 if test -f "$ABC_DIR/${ABC_FILENAME}.fmt"; then
     abcm2ps -O "$PDF_DIR/${ABC_FILENAME}_raw.ps" -F "$ABC_DIR/${ABC_FILENAME}.fmt" "$ABC_DIR/${ABC_FILENAME}.abc"
 elif test -f "$ABC_DIR/default.fmt"; then

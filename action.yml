@@ -19,12 +19,18 @@ runs:
       run: docker pull ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }}
       shell: bash
 
+    - name: Create Output Directories
+      run: |
+        mkdir -p "${{ github.workspace }}/pdfs"
+        mkdir -p "${{ github.workspace }}/mp3s"
+      shell: bash
+
     - name: Run PDF Generation
       run: |
         docker run --rm \
-        -v ${{ github.workspace }}/${{ inputs.abc_dir }}:/abcs/ \
-        -v ${{ github.workspace }}/pdfs:/pdfs/ \
-        --env ABC_FILENAME=${{ inputs.file_name }} \
+        -v "${{ github.workspace }}/${{ inputs.abc_dir }}":/abcs/ \
+        -v "${{ github.workspace }}/pdfs":/pdfs/ \
+        --env ABC_FILENAME="${{ inputs.file_name }}" \
         --env GIT_HASH=${GITHUB_SHA::7} \
         ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} /scripts/create_pdf.sh
       shell: bash
@@ -32,7 +38,7 @@ runs:
     - name: Run MP3 Generation
       run: |
         docker run --rm \
-        -v ${{ github.workspace }}/${{ inputs.abc_dir }}:/abcs/ \
-        -v ${{ github.workspace }}/mp3s:/mp3s/ \
-        ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} python3 /scripts/generate_mp3.py /abcs/${{ inputs.file_name }}.abc /mp3s
+        -v "${{ github.workspace }}/${{ inputs.abc_dir }}":/abcs/ \
+        -v "${{ github.workspace }}/mp3s":/mp3s/ \
+        ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} python3 /scripts/generate_mp3.py "/abcs/${{ inputs.file_name }}.abc" /mp3s
       shell: bash
