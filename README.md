@@ -109,7 +109,7 @@ Converts all JPG files in the `/abcs` directory to EPS files in the same directo
 
 ### Batch Processing
 
-There are helper scripts to process all ABC files in the `/abcs` directory.
+There are helper scripts to process all ABC files in the `/abcs` directory
 
 - **Create all PDFs:**
   ```bash
