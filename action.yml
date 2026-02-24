@@ -4,13 +4,35 @@ description: 'Compiles ABC notation files into high-quality PDFs and MP3s.'
 author: 'matt20013'
 
 inputs:
+  action:
+    description: 'Action to perform'
+    required: true
+    default: 'all'
+    type: choice
+    options:
+    - all
+    - pdfs
+    - csvs
+    - mp3s
+    - midi
+    - jpgs
+  skip_errors:
+    description: 'Skip errors and continue processing'
+    required: false
+    default: true
+    type: boolean
+  force_creation:
+    description: 'Force creation of PDFs'
+    required: false
+    default: false
+    type: boolean
   abc_dir:
     description: 'The folder containing your .abc files'
     required: false
     default: 'abcs'
   file_name:
     description: 'The specific ABC file to process (without extension)'
-    required: true
+    required: false
   pdf_dir:
     description: 'The output folder for PDF files'
     required: false
@@ -19,6 +41,14 @@ inputs:
     description: 'The output folder for MP3 files'
     required: false
     default: 'mp3s'
+  csv_dir:
+    description: 'The output folder for CSV files'
+    required: false
+    default: 'csvs'
+  branches:
+    description: 'Comma-separated list of branches to apply the rebuild_changed_only logic. Use "*" for all.'
+    required: false
+    default: '*'
   auto_commit:
     description: 'Whether to automatically commit the generated files back to the repo'
     required: false
@@ -31,33 +61,42 @@ runs:
       run: docker pull ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }}
       shell: bash
 
-    - name: Create Output Directories
+    - name: Prepare Environment
       run: |
         mkdir -p "${{ github.workspace }}/${{ inputs.pdf_dir }}"
         mkdir -p "${{ github.workspace }}/${{ inputs.mp3_dir }}"
+        mkdir -p "${{ github.workspace }}/${{ inputs.csv_dir }}"
+        chmod +x "${{ github.action_path }}/scripts/"*.sh
+        chmod +x "${{ github.action_path }}/scripts/action_entrypoint.py"
       shell: bash
 
-    - name: Run PDF Generation
+    - name: Run ABC Compiler
       run: |
         docker run --rm \
-        -v "${{ github.workspace }}/${{ inputs.abc_dir }}":/abcs/ \
-        -v "${{ github.workspace }}/${{ inputs.pdf_dir }}":/pdfs/ \
-        --env ABC_FILENAME="${{ inputs.file_name }}" \
-        --env GIT_HASH=${GITHUB_SHA::7} \
-        ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} /scripts/create_pdf.sh
-      shell: bash
-
-    - name: Run MP3 Generation
-      run: |
-        docker run --rm \
-        -v "${{ github.workspace }}/${{ inputs.abc_dir }}":/abcs/ \
-        -v "${{ github.workspace }}/${{ inputs.mp3_dir }}":/mp3s/ \
-        ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} python3 /scripts/generate_mp3.py "/abcs/${{ inputs.file_name }}.abc" /mp3s
+        -v "${{ github.workspace }}":/github/workspace \
+        -v "${{ github.action_path }}/scripts":/scripts \
+        -v "${{ github.event_path }}":/github/workflow/event.json:ro \
+        -w /github/workspace \
+        -e GITHUB_WORKSPACE="/github/workspace" \
+        -e GITHUB_EVENT_PATH="/github/workflow/event.json" \
+        -e GITHUB_EVENT_NAME="${{ github.event_name }}" \
+        -e GITHUB_REF_NAME="${{ github.ref_name }}" \
+        -e INPUT_ACTION="${{ inputs.action }}" \
+        -e INPUT_SKIP_ERRORS="${{ inputs.skip_errors }}" \
+        -e INPUT_FORCE_CREATION="${{ inputs.force_creation }}" \
+        -e INPUT_ABC_DIR="${{ inputs.abc_dir }}" \
+        -e INPUT_FILE_NAME="${{ inputs.file_name }}" \
+        -e INPUT_PDF_DIR="${{ inputs.pdf_dir }}" \
+        -e INPUT_MP3_DIR="${{ inputs.mp3_dir }}" \
+        -e INPUT_CSV_DIR="${{ inputs.csv_dir }}" \
+        -e INPUT_BRANCHES="${{ inputs.branches }}" \
+        ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} \
+        /scripts/action_entrypoint.py
       shell: bash
 
     - name: Commit Generated Media Back to Repo
       if: ${{ inputs.auto_commit == 'true' }}
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: "chore: update compiled PDFs and MP3s [skip ci]"
-        file_pattern: '${{ inputs.pdf_dir }} ${{ inputs.mp3_dir }}'
+        commit_message: "chore: update compiled media [skip ci]"
+        file_pattern: '${{ inputs.pdf_dir }} ${{ inputs.mp3_dir }} ${{ inputs.csv_dir }}'
