@@ -11,6 +11,7 @@ jobs:
         with:
           abc_dir: 'test_data/abcs'
           file_name: 'test_tune'
+          auto_commit: 'false'
       - name: Verify Output (Single File)
         run: |
           ls -R test_data
@@ -28,6 +29,7 @@ jobs:
           file_name: 'test_tune'
           pdf_dir: 'my_pdfs'
           mp3_dir: 'my_mp3s'
+          auto_commit: 'false'
       - name: Verify Output (Custom Outputs)
         run: |
           ls -R my_pdfs

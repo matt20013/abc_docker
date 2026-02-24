@@ -19,6 +19,10 @@ inputs:
     description: 'The output folder for MP3 files'
     required: false
     default: 'mp3s'
+  auto_commit:
+    description: 'Whether to automatically commit the generated files back to the repo'
+    required: false
+    default: 'true'
 
 runs:
   using: "composite"
@@ -50,3 +54,10 @@ runs:
         -v "${{ github.workspace }}/${{ inputs.mp3_dir }}":/mp3s/ \
         ghcr.io/matt20013/abc_docker:${{ github.action_ref || 'latest' }} python3 /scripts/generate_mp3.py "/abcs/${{ inputs.file_name }}.abc" /mp3s
       shell: bash
+
+    - name: Commit Generated Media Back to Repo
+      if: ${{ inputs.auto_commit == 'true' }}
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "chore: update compiled PDFs and MP3s [skip ci]"
+        file_pattern: '${{ inputs.pdf_dir }} ${{ inputs.mp3_dir }}'
