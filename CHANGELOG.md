@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/matt20013/abc_docker/compare/v1.1.0...v1.1.1) (2026-02-24)
+
+
+### Bug Fixes
+
+* trigger new version ([adde65e](https://github.com/matt20013/abc_docker/commit/adde65ebf76c3acc8ff49abbd42308e2d4eb1155))
+
 ## [1.1.0](https://github.com/matt20013/abc_docker/compare/v1.0.0...v1.1.0) (2026-02-24)
 
 
