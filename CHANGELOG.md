@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/matt20013/abc_docker/compare/v1.1.1...v1.2.0) (2026-02-24)
+
+
+### Features
+
+* add pdf_dir and mp3_dir inputs to action.yml ([1328a5e](https://github.com/matt20013/abc_docker/commit/1328a5ea3979eafabc04da454d3cc742d3ee7088))
+
+
+### Bug Fixes
+
+* Allow custom output directories in action.yml ([eaa3a80](https://github.com/matt20013/abc_docker/commit/eaa3a80f57f211f234ac00ea6714ebb36a195f2f))
+
 ## [1.1.1](https://github.com/matt20013/abc_docker/compare/v1.1.0...v1.1.1) (2026-02-24)
 
 
