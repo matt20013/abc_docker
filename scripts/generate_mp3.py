@@ -18,11 +18,19 @@ parser.add_argument('output_path',
                        metavar='output_folder',
                        type=str,
                        help='the path to mp3 folder')
+parser.add_argument('--midi-only',
+                       action='store_true',
+                       help='Only generate MIDI files, skip audio conversion')
+parser.add_argument('--keep-midi',
+                       action='store_true',
+                       help='Keep MIDI files after generation')
 
 args = parser.parse_args()
 
 input_path = args.input_path
 output_path = args.output_path
+midi_only = args.midi_only
+keep_midi = args.keep_midi
 
 print(f"Processing: {input_path}")
 
@@ -57,7 +65,14 @@ def process_tune(tune):
         remove_raw_wav = "rm {raw_wav_path}".format(raw_wav_path=raw_wav_path)
         remove_wav = "rm {wav_path}".format(wav_path=wav_path)
         remove_mid = "rm {midi_path}".format(midi_path=midi_path)
-        commands.extend([abc_to_midi, mid_to_wave,remove_silence,wav_to_mp3,remove_mid,remove_raw_wav,remove_wav])
+
+        cmds = [abc_to_midi]
+        if not midi_only:
+            cmds.extend([mid_to_wave, remove_silence, wav_to_mp3, remove_raw_wav, remove_wav])
+            if not keep_midi:
+                cmds.append(remove_mid)
+
+        commands.extend(cmds)
 
 with open(input_path, "r", encoding="utf-8") as f:
 
@@ -91,7 +106,14 @@ with open(input_path, "r", encoding="utf-8") as f:
         remove_raw_wav = "rm {raw_wav_path}".format(raw_wav_path=raw_wav_path)
         remove_wav = "rm {wav_path}".format(wav_path=wav_path)
         remove_mid = "rm {midi_path}".format(midi_path=midi_path)
-        commands.extend([abc_to_midi, mid_to_wave,remove_silence,wav_to_mp3,remove_mid,remove_raw_wav,remove_wav])
+
+        cmds = [abc_to_midi]
+        if not midi_only:
+            cmds.extend([mid_to_wave, remove_silence, wav_to_mp3, remove_raw_wav, remove_wav])
+            if not keep_midi:
+                cmds.append(remove_mid)
+
+        commands.extend(cmds)
 
 print(f"Commands to execute: {len(commands)}")
 

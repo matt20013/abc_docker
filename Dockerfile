@@ -22,6 +22,7 @@ RUN cd "$(dirname $(which python3))" && ln -s idle3 idle \
 COPY dependencies/*.sf2 /usr/share/sound/soundfonts/
 COPY dependencies/*.otf /root/.fonts/
 COPY scripts/ /scripts/
-RUN chmod +x /scripts/*.sh && chmod 644 /scripts/default.fmt
+RUN chmod +x /scripts/*.sh && chmod +x /scripts/action_entrypoint.py
 WORKDIR /scripts
 ENV ABC_FONTS_PATH=/root/.fonts
+ENTRYPOINT ["/scripts/action_entrypoint.py"]
