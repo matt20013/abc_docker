@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/matt20013/abc_docker/compare/v1.3.1...v1.4.0) (2026-02-24)
+
+
+### Features
+
+* add granular action options and smart rebuild logic ([6b27d27](https://github.com/matt20013/abc_docker/commit/6b27d27608c3352facd23050d34c927cbe946f03))
+* enhance abc_docker with granular actions and smart rebuild ([9d6c7c6](https://github.com/matt20013/abc_docker/commit/9d6c7c6206cf488d16feb08286f929aa0d18b31c))
+
 ## [1.3.1](https://github.com/matt20013/abc_docker/compare/v1.3.0...v1.3.1) (2026-02-24)
 
 
