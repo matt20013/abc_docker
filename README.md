@@ -128,7 +128,7 @@ There are helper scripts to process all ABC files in the `/abcs` directory.
 
 ### Clean up ABC files
 Fixes Windows line endings (CRLF) and trailing spaces that cause `abc2midi` to crash.
-`docker run -it -v ${PWD}/abcs:/abcs/ abc ./clean_abc.sh ../abcs/tunes.abc`
+`docker run -it -v ${PWD}/abcs:/abcs/ abc ./clean_abc.sh ../abcs/tunes.abc`.
 
 ## CI / GitHub Actions
 
