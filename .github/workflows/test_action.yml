@@ -19,3 +19,18 @@ jobs:
           test -f pdfs/test_tune.pdf
           # Check for MP3 (file structure might vary based on script logic)
           find mp3s -name "*.mp3"
+
+      # Test 2: Custom Output Directories
+      - name: Run Action (Custom Outputs)
+        uses: ./
+        with:
+          abc_dir: 'test_data/abcs'
+          file_name: 'test_tune'
+          pdf_dir: 'my_pdfs'
+          mp3_dir: 'my_mp3s'
+      - name: Verify Output (Custom Outputs)
+        run: |
+          ls -R my_pdfs
+          ls -R my_mp3s
+          test -f my_pdfs/test_tune.pdf
+          find my_mp3s -name "*.mp3"
