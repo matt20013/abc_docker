@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/matt20013/abc_docker/compare/v1.2.0...v1.3.0) (2026-02-24)
+
+
+### Features
+
+* Add auto-commit functionality to abc_docker action ([55a589c](https://github.com/matt20013/abc_docker/commit/55a589c8ae05a379c27935f998f4aadb4efde06b))
+* Add auto-commit functionality to abc_docker action ([d629171](https://github.com/matt20013/abc_docker/commit/d629171f6eb4aded5e7516631a40a2d7c520eb25))
+
 ## [1.2.0](https://github.com/matt20013/abc_docker/compare/v1.1.1...v1.2.0) (2026-02-24)
 
 
