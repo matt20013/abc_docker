@@ -195,4 +195,4 @@ This project makes use of the following tools and resources:
 ### Fonts and Soundfonts
 
 *   **[Petaluma Font](https://github.com/steinbergmedia/petaluma)**: Used for music notation (SIL Open Font License).
-*   **[Upright Piano KW Soundfont](https://freepats.zenvoid.org/Piano/acoustic-grand-piano.html)**: Used for MIDI playback (CC0 1.0).
+*   **[Upright Piano KW Soundfont](https://freepats.zenvoid.org/Piano/acoustic-grand-piano.html)**: Used for MIDI playback (CC0 1.0)
